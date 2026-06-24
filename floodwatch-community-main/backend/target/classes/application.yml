@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: water-logging-backend
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/floodwatch_db
+    username: postgres
+    password: 2402
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+# CORS Configuration
+cors:
+  allowed-origins: http://localhost:5173,http://localhost:3000
+  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+  allowed-headers: "*"
+  allow-credentials: true
+
+# JWT Configuration
+jwt:
+  secret: 9aK7mQ4vT2xY8pL3sD6fH1jW5rE7uI0oP2qS4tV6wX8yZ0aB2cD4eF6gH8jK1mN3pR5tV7xZ9bC1dE3gH5jK7mP9rT1vX3z5A7C9E1G3I5K7M9P1R3T5V7X9Z1B3D5F7H9J1L3N5P7R9T1V3X5Z7B9D1F3H5J7L9N1P3R5T7V9X1Z3
+  expiration: 86400000 # 24 hours
+
+# File Upload
+file:
+  upload-dir: ./uploads

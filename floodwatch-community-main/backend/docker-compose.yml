@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: floodwatch-postgres
+    environment:
+      POSTGRES_DB: floodwatch_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 2301
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./src/main/resources/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    networks:
+      - floodwatch-network
+
+  # Spring Boot Backend
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: floodwatch-backend
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/floodwatch_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 2301
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./uploads:/app/uploads
+    networks:
+      - floodwatch-network
+
+volumes:
+  postgres_data:
+
+networks:
+  floodwatch-network:
+    driver: bridge
